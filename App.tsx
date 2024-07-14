@@ -1,117 +1,81 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { TouchableOpacity, useColorScheme, Text, View, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import Home from './src/screens/Home/Home';
+import Walk from './src/screens/Home/walk/Walk';
+import Start from './src/screens/transport/start';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+export type RootStackParamList = {
+  Home: undefined;
+  Walk: undefined;
+  Start: undefined;
+};
+ 
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+const CustomHeaderRight = () => {
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
+    <TouchableOpacity onPress={() => { }} style={styles.buttonContainer}>
+      <View style={styles.iconContainer}>
+        <Icon name="gift" size={16} color="#00cc99" />
+      </View>
+      <Text style={styles.buttonText}>
+        Earn$$$
       </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
+    </TouchableOpacity>
   );
-}
+};
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+const App = () => {
+  const colorScheme = useColorScheme();
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <Stack.Navigator initialRouteName="Home" screenOptions={{ statusBarColor: '#00cc99', headerStyle: { backgroundColor: '#fff' }, headerTintColor: '#00cc99', headerTitleAlign: 'left' }}>
+        <Stack.Screen
+          name="Home" component={Home} options={({ navigation }) => ({
+            headerShown: true, title: 'Atlanta Pet Transport', headerLeft: () => (
+              <TouchableOpacity onPress={() => { }}>
+                <Icon name="menu" size={24} color="#00cc99" style={{ marginHorizontal: 15 }} />
+              </TouchableOpacity>
+            ),
+            headerRight: () => <CustomHeaderRight />,
+          })}
+        />
+        <Stack.Screen name="Walk" component={Walk} options={{ headerShown: true, title: '', headerStyle: { backgroundColor: 'transparent' }, headerTransparent: true, }} />
+        <Stack.Screen name="Start" component={Start} options={{ headerShown: true, title: '', headerStyle: { backgroundColor: 'transparent' }, headerTransparent: true, }} />
+    
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  buttonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    backgroundColor: '#00cc99',
+    borderColor: '#00cc99',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 5,
   },
-  sectionTitle: {
-    fontSize: 24,
+  iconContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    padding: 3,
+    marginRight: 5,
+  },
+  buttonText: {
+    color: '#fff',
     fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+    backgroundColor: 'transparent',
+    borderRadius: 5,
+    padding: 3,
   },
 });
 
